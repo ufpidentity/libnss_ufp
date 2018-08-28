@@ -1,0 +1,1 @@
+gcc -ggdb -fPIC -Wall -shared -o libnss_ufp.so.2 -Wl,-init,_nss_ufp_init,-fini,_nss_ufp_fini,-soname,libnss_ufp.so.2 libnss_ufp.c process_check.c read_config.c strmap.c -lufpidentity
