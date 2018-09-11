@@ -21,7 +21,7 @@ After acquiring the source, and the required dependencies, you can build with:
 Configuration
 -------------
 
-The configuration file "/etc/libnss-ufp.conf" is required. While most of the options have sensible defaults, the file is required and there are required parameters.
+The configuration file "/etc/libnss-ufp.conf" is required. While most of the parameters have sensible defaults, the file is required and there are required parameters.
 
 Required Parameters
 -------------------
