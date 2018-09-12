@@ -28,13 +28,13 @@ Required Parameters
 
 The required options should be the same values as used for
 libpam-ufpidentity. See https://www.ufp.com/identity/integration.html#getting_started for tips
-on creating and sending a valid certificate request.
+on creating and submitting a valid certificate request.
 
 You need to get credentials for accessing the UFP Identity service.
 Make sure to have an ASCII representable key for your private key, and
 make sure to carefully think about the CN you use. For a large number
-of machines, you may want to use a common parent domain [like example.com], rather than
-web01.example.com, web02.example.com, etc. On a Linux machine it is
+of hosts, you may want to use a common parent domain [like example.com], rather than
+web01.example.com, web02.example.com, etc. On a Linux host it is
 recommended to keep your private keys in /etc/ssl/private/ and your
 certificates in /etc/ssl/certs/. You will also need our truststore
 somewhere (/etc/ssl/certs/ is good).
@@ -47,6 +47,11 @@ certificate.file - the fully qualified pathname of the certificate file [e.g. /e
 key.file - the fully qualified pathname of the key file [e.g. /etc/ssl/private/www.example.com.key.pem]
 key.passphrase - the passphrase associated with the key file
 truststore.file - the truststore file for validating identity servers [e.g. /etc/ssl/certs/truststore.pem]
+
+Syntax
+------
+
+parameter = value [e.g. base.uid = 500]
 
 Optional Parameters
 -------------------
