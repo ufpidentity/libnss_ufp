@@ -4,13 +4,14 @@ UFP Identity NSS module
 Overview
 --------
 
-The UFP Identity NSS module provides naming services from UFP
-Identity. It is meant to be used in conjunction with
+The UFP Identity NSS module provides naming services via the UFP
+Identity service. It is meant to be used in conjunction with
 libpam-ufpidentity. Although you can use any naming service you like,
 libnss_ufp allows you to use the same directory as your logins.
 
 Installation
 ------------
+
 After acquiring the source, and the required dependencies, you can build with:
 
     autogen.sh
@@ -21,32 +22,37 @@ After acquiring the source, and the required dependencies, you can build with:
 Configuration
 -------------
 
-The configuration file "/etc/libnss-ufp.conf" is required. While most of the options have sensible defaults, the file is required and there are required parameters.
+The configuration file "/etc/libnss-ufp.conf" is required. While most of the parameters have sensible defaults, the file is required and there are required parameters.
+
+Syntax
+------
+
+parameter = value [e.g. base.uid = 500]
 
 Required Parameters
 -------------------
 
 The required options should be the same values as used for
 libpam-ufpidentity. See https://www.ufp.com/identity/integration.html#getting_started for tips
-on creating and sending a valid Certifiate Request.
+on creating and submitting a valid certificate request.
 
 You need to get credentials for accessing the UFP Identity service.
-Make sure to have an ASCII representable key for your private key. And
+Make sure to have an ASCII representable key for your private key, and
 make sure to carefully think about the CN you use. For a large number
-of machines you may want a base domain like example.com, rather than
-web01.example.com, web02.example.com, etc. On a Linux machine it is
-recommended to keep your private keys in /etc/ssl/private and your
-certificates in /etc/ssl/certs. You will also need our truststore
-somewhere (/etc/ssl/certs is good).
+of hosts, you may want to use a common parent domain [like example.com], rather than
+web01.example.com, web02.example.com, etc. On a Linux host it is
+recommended to keep your private keys in /etc/ssl/private/ and your
+certificates in /etc/ssl/certs/. You will also need our truststore
+somewhere (/etc/ssl/certs/ is good).
 
-n.b. /etc/ssl/private is a restricted directory. Make sure you
+n.b. /etc/ssl/private/ is a restricted directory. Make sure you
 understand and configure appropriate permissions for access to files
 in there.
 
-certificate.file - the fully qualified name of the certificate file e.g. /etc/ssl/certs/www.example.com.crt.pem
-key.file - the fully qualified name of the key file e.g. /etc/ssl/private/www.example.com.key.pem
+certificate.file - the fully qualified pathname of the certificate file [e.g. /etc/ssl/certs/www.example.com.crt.pem]
+key.file - the fully qualified pathname of the key file [e.g. /etc/ssl/private/www.example.com.key.pem]
 key.passphrase - the passphrase associated with the key file
-truststore.file - the truststore file for validating Identity servers e.g. /etc/ssl/certs/truststore.pem
+truststore.file - the truststore file for validating identity servers [e.g. /etc/ssl/certs/truststore.pem]
 
 Optional Parameters
 -------------------
@@ -58,16 +64,16 @@ default.home - Default: /home/%s
 - The default home directory of the user, sprintf is used to push the username into the home directory.
 
 default.shell - Default: /bin/bash
-- The default shell given to the user. Any shell installed and in /etc/shells may be used
+- The default shell given to the user. Any shell installed and listed in /etc/shells may be used
 
 gate - Default: /var/run/sshd.pid
 - A gate to watch for before actually returning results from UFP Identity. If the gate exists, results will be returned from UFP IDentity. If the gate does not exist, NSS_NOT_FOUND is returned for most results.
 
 gid.list - Default: none, comma separated list e.g. 500,50
-- Any additional group id's to be allocated to the user. If the first entry in the list is the value 'uid', the uid given to the user will also be used as a gid for the user. If the first entry in the list is a numeric value NOT in /etc/group, that value will be used as a gid.base for the user. The only other valid entries are numeric and must be present in /etc/group
+- Any additional group ids to be allocated to the user. If the first entry in the list is the value 'uid', the uid given to the user will also be used as a gid for the user. If the first entry in the list is a numeric value NOT in /etc/group, that value will be used as a gid.base for the user. The only other valid entries are numeric and must be present in /etc/group
 
 /etc/nsswitch.conf
--------------------
+------------------
 
 Add 'ufp' to the passwd, group and shadow entries in /etc/nssswitch.conf e.g.
 
