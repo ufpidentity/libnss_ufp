@@ -9,7 +9,7 @@
 #define MIN_UID_NUMBER   500
 #define MIN_GID_NUMBER   500
 
-#ifdef __PIC__
+#ifndef TEST
 #define CONF_FILE "/etc/libnss-ufp.conf"
 #else
 #define CONF_FILE "./test.config"
@@ -41,6 +41,29 @@ long check_number(char *str) {
     }
 
     return val;
+}
+
+char *trim(char *untrimmed) {
+    char *trimmed = NULL;
+    if (untrimmed != NULL) {
+        char *s = untrimmed;
+        while (isspace((unsigned char) *s) && (*s != '\0'))
+            s++;
+        char *p = untrimmed + strlen(untrimmed);
+        while (p > s && (isspace((unsigned char) *p) || *p == '\0'))
+            p--;
+        if (p-s > 0) {
+            int size = (p-s) + 2;
+            trimmed = malloc(sizeof(char)*size);
+            memset(trimmed, 0, sizeof(char)*size);
+
+            for (int index = 0; index < size-1; index++) {
+                trimmed[index]=*s;
+                s++;
+            }
+        }
+    }
+    return trimmed;
 }
 
 char *allocate(const char *string) {
@@ -87,8 +110,16 @@ void read_config(config_t *config, certificate_config_t *certificate_config)
         else if (strchr(line, '=') != NULL) {
             key = strtok(line, delimeter);
             value = strtok(NULL, delimeter);
-            //printf("found key %s, with value %s\n", key, value);
-            sm_put(sm, key, value);
+            char *key_trimmed = trim(key);
+            char *value_trimmed = trim(value);
+
+            if ((key_trimmed != NULL) && (value_trimmed != NULL))
+                sm_put(sm, key_trimmed, value_trimmed);
+
+            if (key_trimmed != NULL)
+                free(key_trimmed);
+            if (value_trimmed != NULL)
+                free(value_trimmed);
         }
     }
     free(line);
@@ -201,3 +232,28 @@ void free_config(config_t *config) {
             free(config->pw_gids);
     }
 }
+
+
+
+#ifdef TEST
+int main(int argc, char *argv[]) {
+    config_t config;
+    certificate_config_t certificate_config;
+    read_config(&config, &certificate_config);
+    printf("got config -> uid_base : %d, uid_to_gid : %d, pw_dir : %s, pw_shell : %s\n",
+           config.pw_uid_base,
+           config.uid_to_gid,
+           config.pw_dir,
+           config.pw_shell);
+    printf("\tlist of %d gids\n", config.gid_count);
+    if (config.gid_count > 0) {
+        int i = 0;
+        for (i = 0; i < config.gid_count; i++) {
+            printf("\t\t%d\n", config.pw_gids[i]);
+        }
+    }
+    free_config(&config);
+    free_certificate_config(&certificate_config);
+    return 0;
+}
+#endif
