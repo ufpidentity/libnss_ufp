@@ -27,7 +27,7 @@ The configuration file "/etc/libnss-ufp.conf" is required. While most of the par
 Syntax
 ------
 
-parameter = value [e.g. base.uid = 500]
+parameter=value [e.g. base.uid=500]
 
 Required Parameters
 -------------------
@@ -52,7 +52,7 @@ in there.
 certificate.file - the fully qualified pathname of the certificate file [e.g. /etc/ssl/certs/www.example.com.crt.pem]
 key.file - the fully qualified pathname of the key file [e.g. /etc/ssl/private/www.example.com.key.pem]
 key.passphrase - the passphrase associated with the key file
-truststore.file - the truststore file for validating identity servers [e.g. /etc/ssl/certs/truststore.pem]
+truststore.file - the truststore file for validating UFP Identity servers [e.g. /etc/ssl/certs/truststore.pem]
 
 Optional Parameters
 -------------------
